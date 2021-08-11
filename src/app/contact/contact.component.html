@@ -1,0 +1,32 @@
+
+<div class="col-md-1 col-lg-1"></div>
+<div class="col-xs-12 col-sm-12 col-md-11 col-lg-11">
+  <mat-expansion-panel style="margin: 15px;padding: 5px">
+    <mat-expansion-panel-header >
+
+      <mat-panel-title style="font-size: larger">
+        {{nom}} {{prenom}}
+      </mat-panel-title>
+      <mat-panel-description>{{dateNaissance}}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div class="row">
+      <div class ="col col-lg-1"></div>
+      <div class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
+        <h2>adresses</h2>
+      </div>
+      <div class="col col-lg-4"></div>    </div>
+    <div id="adress_grid" class="row ag-theme-alpine">
+      <ag-grid-angular
+        style="width:100%;height: 200px"
+        class="ag-theme-alpine"
+        [rowData]="rowData"
+        [columnDefs]="columnDefs"
+      >
+      </ag-grid-angular>
+    </div>
+    <mat-action-row>
+    <button mat-button>Modifier</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</div>

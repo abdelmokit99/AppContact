@@ -3,9 +3,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MatSliderModule } from '@angular/material/slider';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridModule } from '@ag-grid-community/angular';
 import { FormsModule } from '@angular/forms';
-
+import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { InMemoryContactService } from './service/in-memory-contact.service';
 
 import {MatExpansionModule} from '@angular/material/expansion';
 
@@ -13,7 +14,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatButtonModule} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { NavigationComponent } from './navigation/navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,15 +26,16 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ListContactsComponent } from './list-contacts/list-contacts.component';
-import {MatGridListModule} from '@angular/material/grid-list';
+import { MatGridListModule} from '@angular/material/grid-list';
 import { ContactComponent } from './contact/contact.component';
-import {RouterModule, Routes} from "@angular/router";
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { RouterModule, Routes } from "@angular/router";
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core'
+import { HttpClientModule } from '@angular/common/http';
+import { ModifierContactComponent } from './modifier-contact/modifier-contact.component';
 
 const appRoutes: Routes = [
   {path: 'adresseForm', component: AdresseFormComponent},
-  {path: 'contacts', component: ListContactsComponent},
   {path: '', component: ListContactsComponent}
 ]
 
@@ -43,7 +45,8 @@ const appRoutes: Routes = [
     NavigationComponent,
     AdresseFormComponent,
     ListContactsComponent,
-    ContactComponent
+    ContactComponent,
+    ModifierContactComponent
   ],
   imports: [
     BrowserModule,
@@ -55,6 +58,9 @@ const appRoutes: Routes = [
     MatToolbarModule,
     MatButtonModule,
     MatExpansionModule,
+    HttpClientModule,
+    HttpClientInMemoryWebApiModule.forRoot(
+      InMemoryContactService, { dataEncapsulation: false }),
     MatDatepickerModule,
     MatNativeDateModule,
     MatGridListModule,

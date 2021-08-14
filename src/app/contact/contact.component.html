@@ -7,7 +7,7 @@
       <mat-panel-title style="font-size: larger">
         {{nom}} {{prenom}}
       </mat-panel-title>
-      <mat-panel-description>{{dateNaissance}}
+      <mat-panel-description>{{dateNaissance}} , {{id}}
       </mat-panel-description>
     </mat-expansion-panel-header>
     <div class="row">
@@ -22,11 +22,14 @@
         class="ag-theme-alpine"
         [rowData]="rowData"
         [columnDefs]="columnDefs"
+        [modules]="modules"
       >
       </ag-grid-angular>
     </div>
+
     <mat-action-row>
     <button mat-button>Modifier</button>
+    <button mat-button (click)="deleteContact()">Supprimer</button>
     </mat-action-row>
   </mat-expansion-panel>
 </div>

@@ -6,10 +6,13 @@
   <div class="col col-lg-4"></div>
 </div>
 
-<app-contact *ngFor="let contact of contacts"
+<app-contact *ngFor="let contact of contacts; let  i = index"
              [nom] = "contact.nom"
              [prenom]="contact.prenom"
-             [dateNaissance]="contact.date"></app-contact>
-<button class="mat-fab-bottom-right" mat-fab>a
-  <mat-icon class="icon">add</mat-icon>
+             [dateNaissance]="contact.date_naissance"
+             [id] = "contact.id"
+             [index]="i"
+             [tab_adresse]="contact.adresses"></app-contact>
+<button class="mat-fab-bottom-right" mat-fab (click)="AddContact()">
+  <mat-icon class="icon" >add</mat-icon>
 </button>

@@ -1,0 +1,144 @@
+<div style="height: 50px" class="row">
+  <div class="col-md-3 col-lg-3">
+    <button mat-button (click)="retour()">retourner à l'acceuil</button>
+  </div>
+  <h1 style="text-align: center">Entrez les informations du contact:</h1>
+</div>
+<form class="adresse-form" [formGroup]="Form">
+  <div class="col-md-10 col-lg-10">
+    <br>
+    <div class="form-row">
+      <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <mat-form-field class="fields" appearance="fill">
+          <mat-label>nom</mat-label>
+          <input matInput type="text" id="nom" placeholder="{{contact.nom}}" formControlName="nom">
+        </mat-form-field>
+      </div>
+      <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <mat-form-field class="fields" appearance="fill">
+          <mat-label>prenom</mat-label>
+          <input matInput type="text" id="prenom" placeholder="{{contact.prenom}}" formControlName="prenom">
+        </mat-form-field>
+      </div>
+    </div>
+    <br>
+    <div class="form-row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <mat-form-field appearance="fill">
+          <mat-label>date de naissance</mat-label>
+          <input matInput [matDatepicker]="picker" placeholder="{{contact.date_naissance}}"  id="dateNaissance" formControlName="dateNaissance">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+    </div>
+    <br>
+    <div style="height: 90px" class="row">
+      <div class="col-md-1 col-lg-1"></div>
+
+    </div>
+    <br>
+    <div class="form-row">
+      <div class="col-md-12 col-lg-12">
+        <h1 style="text-align: center">Entrez les adresses:</h1>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <mat-form-field class="fields" appearance="fill">
+          <mat-label>Type d'adresse</mat-label>
+          <input matInput id="typeAdresse" formControlName="typeAdresse">
+        </mat-form-field>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <mat-form-field class="fields" appearance="fill">
+          <mat-label>Téléphone</mat-label>
+          <input matInput id="telephone" formControlName="telephone">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <br>
+    <div class="form-row">
+
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <mat-form-field class="fields" appearance="fill">
+          <mat-label>Type de voie</mat-label>
+          <input matInput id="typeVoie" formControlName="typeVoie">
+        </mat-form-field>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <mat-form-field class="fields" appearance="fill">
+          <mat-label>rue</mat-label>
+          <input matInput id="rue" formControlName="rue">
+        </mat-form-field>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <mat-form-field class="fields" appearance="fill">
+          <mat-label>numéro de voie</mat-label>
+          <input matInput id="numeroVoie" formControlName="numeroVoie">
+        </mat-form-field>
+      </div>
+    </div>
+    <br>
+    <div class="form-row">
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <mat-form-field class="fields" appearance="fill">
+          <mat-label>ville</mat-label>
+          <input matInput placeholder="Ex. Paris " id="ville" formControlName="ville">
+        </mat-form-field>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <mat-form-field class="fields" appearance="fill">
+          <mat-label>code postal</mat-label>
+          <input matInput #postalCode maxlength="5" placeholder="Ex. 75000" id="cp" formControlName="cp">
+        </mat-form-field>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <mat-form-field class="fields" appearance="fill">
+          <mat-label>Pays</mat-label>
+          <input matInput placeholder="Ex. France" id="pays" formControlName="pays">
+        </mat-form-field>
+      </div>
+    </div>
+    <br>
+    <div class="form-row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <mat-form-field class="example-full-width" appearance="fill" style="width: 100%">
+          <mat-label>Commentaires</mat-label>
+          <textarea matInput placeholder="Ex. commentaires" id="commentaire" formControlName="commentaire"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="form-row">
+      <mat-action-row>
+        <button mat-button (click)="addAdresse()">Ajouter l'adresse</button>
+      </mat-action-row>
+      <mat-action-row>
+        <button mat-button type="submit" [disabled]="!(adress.length > 0)" (click)="onSubmit()">Enregistrer</button>
+      </mat-action-row>
+    </div>
+  </div>
+  <div></div>
+
+</form>
+<div style="height: 150px" class="row">
+  <div class="col-md-3 col-lg-3"></div>
+  <h1 style="text-align: center">voici les adresses du contacts:</h1>
+</div>
+<ag-grid-angular
+  style="width:100%;height: 200px"
+  class="ag-theme-alpine"
+  [rowData]="rowData"
+  [columnDefs]="columnDefs"
+  [modules]="modules"
+  [enableRangeSelection]="true"
+
+  rowSelection='single'
+>
+</ag-grid-angular>
+<div class="row">
+  <mat-action-row style="padding: 20px">
+    <button mat-button (click)="deleteAdresses()">réinitialiser les adresses</button>
+  </mat-action-row>
+
+</div>

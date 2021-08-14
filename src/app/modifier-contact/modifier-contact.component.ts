@@ -1,24 +1,22 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ContactService} from "../service/contact.service";
-import {Adresse} from "../Models/adresse";
-import {AllCommunityModules, Module} from "@ag-grid-community/all-modules";
-import {Contact} from "../Models/contact";
-import {AdresseService} from "../service/adresse.service";
-import {AgGridAngular} from "@ag-grid-community/angular";
+import { Component, OnInit } from '@angular/core';
 import {GridOptions} from "ag-grid-community";
-import {Router} from "@angular/router";
-import { DatePipe } from '@angular/common';
-
+import {AllCommunityModules, Module} from "@ag-grid-community/all-modules";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Adresse} from "../Models/adresse";
+import {Contact} from "../Models/contact";
+import {ContactService} from "../service/contact.service";
+import {AdresseService} from "../service/adresse.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {DatePipe} from "@angular/common";
 
 @Component({
-  selector: 'app-adresse-form',
-  templateUrl: './adresse-form.component.html',
-  styleUrls: ['./adresse-form.component.css']
+  selector: 'app-modifier-contact',
+  templateUrl: './modifier-contact.component.html',
+  styleUrls: ['./modifier-contact.component.css']
 })
-export class AdresseFormComponent implements OnInit{
+export class ModifierContactComponent implements OnInit {
 
-  gridOptions : GridOptions;
+
 
   public modules: Module[] = AllCommunityModules;
 
@@ -34,16 +32,17 @@ export class AdresseFormComponent implements OnInit{
 
   rowData = [
     { type: "", adresse: "", ville:"", cp: 0, pays: "",numero: "", commentaire: "" }
-    ];
+  ];
 
   Form: FormGroup;
   adress : Adresse[];
+  contacts : Contact[];
   contact : Contact;
-
+  id: string;
   constructor(private fb: FormBuilder,
               private contactService: ContactService,
               private adresseService : AdresseService,
-              private router: Router) {
+              private router: Router,private route: ActivatedRoute) {
     this.Form = this.fb.group({
       nom : ['',Validators.required],
       prenom : ['',Validators.required],
@@ -60,13 +59,50 @@ export class AdresseFormComponent implements OnInit{
     })
     this.adress = [];
     this.contact = new Contact();
-    this.gridOptions = {
-      rowData: this.rowData,
-      columnDefs: this.columnDefs,
-    }
+    this.id = "";
+    this.contacts = []
   }
+
+
+  /**
+   *
+   *
+   * ici j'ai trouvé un probléme je ne peux pas obtenir le contact .
+   * j'ai cherché beaucoups mais j'ai pas trouvé pourquoi.
+   *
+   *
+   */
   ngOnInit() {
+    this.id =  this.route.snapshot.params['id'];
+
+    this.contactService.getContact(this.id).subscribe(
+      contact => {
+        this.contact = contact
+      }
+    )
+    console.log(this.contact.adresse)
+    for(let cont of this.contacts) {
+      if ( cont.id === this.id) {
+        this.contact = cont
+      }
+    }
+    console.log((this.contact.adresse))
+
     this.rowData.pop();
+    for( let adresse of this.contact.adresse){
+      this.rowData.push(
+        {
+          type: "" + adresse.typeAdresse,
+          adresse: "" + adresse.numero + " " + adresse.typeVoie + " " + adresse.rue,
+          ville: "" + adresse.ville,
+          cp: adresse.cp,
+          pays: adresse.pays,
+          numero: adresse.numeroTelephone,
+          commentaire: adresse.commentaire
+
+        })
+    }
+
   }
 
   addAdresse(){
@@ -141,15 +177,15 @@ export class AdresseFormComponent implements OnInit{
   onSubmit(): void {
     const formValue = this.Form.value;
     const datepipe: DatePipe = new DatePipe('en-US')
-    let formattedDate = datepipe.transform(formValue['dateNaissance'], 'dd-MM-YYYY')
+    let formattedDate = datepipe.transform(formValue['dateNaissance'], 'DD-MMM-YYYY')
 
-    this.contact = new Contact(""+formValue['nom'],""+formValue['prenom'],""+formattedDate);
+    this.contact = new Contact(""+formValue['nom'],""+formValue['prenom'],""+formValue['dateNaissance']);
     for(let adresse of this.adress){
       this.adresseService.addAdresse(adresse);
       this.contact.addAdresse(adresse);
     }
     this.contactService.addContact(this.contact).subscribe  (contact => {
-      console.log(" Contact Added");
+        console.log(" Contact Added");
       }
     );
     this.router.navigate(['']);

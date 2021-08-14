@@ -30,7 +30,7 @@ export class ListContactsComponent implements OnInit,OnDestroy {
 
   ngOnInit(): void {
     console.log(this.contacts.length)
-    let a = new Contact( "hmida", "bougouza", "10/08/1999",["fdc6ea5382cbe7d11ef0219f5216bcb2","8f3349f666cc5efca6b6b574bdf33098"]);
+    let a = new Contact( "hmida", "bougouza", "10/08/1999");
     //this.contactService.addContact(a);
     this.contactService.addContact(a)
       .subscribe(contact => {
@@ -53,8 +53,8 @@ export class ListContactsComponent implements OnInit,OnDestroy {
     this.contactService.deleteContact(this.contacts[index].id).subscribe();
   }
 
-  reconstructContact(nom: string, prenom: string, date_naissance: string, adresse: string[]){
-    let aux = new Contact(nom,prenom,date_naissance,adresse);
+  reconstructContact(nom: string, prenom: string, date_naissance: string){
+    let aux = new Contact(nom,prenom,date_naissance);
   }
 
   AddContact(){

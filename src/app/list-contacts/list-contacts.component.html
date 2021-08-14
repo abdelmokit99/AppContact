@@ -7,12 +7,21 @@
 </div>
 
 <app-contact *ngFor="let contact of contacts; let  i = index"
+             [id]="contact.id"
              [nom] = "contact.nom"
              [prenom]="contact.prenom"
              [dateNaissance]="contact.date_naissance"
-             [id] = "contact.id"
              [index]="i"
-             [tab_adresse]="contact.adresses"></app-contact>
-<button class="mat-fab-bottom-right" mat-fab (click)="AddContact()">
-  <mat-icon class="icon" >add</mat-icon>
-</button>
+             [tab_adresse]="contact.adresses"
+             [contactSubscription]="this.contactSubscription"></app-contact>
+
+
+
+
+<div style="z-index:5; position : fixed;align-self : end;bottom : 10%; margin-bottom : 68px;">
+
+  <button  class="mat-fab-bottom-right" style="background-color: #F2F2F2" mat-fab (click)="AddContact()">
+    <mat-icon class="icon"  style="color: #D95F69">add</mat-icon>
+  </button>
+</div>
+

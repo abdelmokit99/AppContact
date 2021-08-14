@@ -36,6 +36,7 @@ import { ModifierContactComponent } from './modifier-contact/modifier-contact.co
 
 const appRoutes: Routes = [
   {path: 'adresseForm', component: AdresseFormComponent},
+  {path: 'modify/:id', component: ModifierContactComponent },
   {path: '', component: ListContactsComponent}
 ]
 

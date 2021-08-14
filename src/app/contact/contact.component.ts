@@ -7,6 +7,7 @@ import {Adresse} from "../Models/adresse";
 import { AllCommunityModules, Module } from '@ag-grid-community/all-modules'
 import {Observable, of, Subject, Subscription} from "rxjs";
 import {GridApi, GridOptions} from "ag-grid-community";
+import {Contact} from "../Models/contact";
 
 @Component({
   selector: 'app-contact',
@@ -19,14 +20,14 @@ export class ContactComponent implements OnInit,GridOptions, OnDestroy {
   public modules: Module[] = AllCommunityModules;
 
   adresseSubscription : Subscription;
-  auxObservable: Observable<Adresse>;
-
+  @Input() contact : Contact;
   @Input() nom: string;
   @Input() prenom: string;
   @Input() dateNaissance: string;
   @Input() id: string;
   @Input() index: number;
-  @Input() tab_adresse: string[];
+  @Input() tab_adresse: Adresse[];
+  @Input() contactSubscription: Subscription;
 
   columnDefs = [
     {field: 'type', sortable: true, filter: true},
@@ -59,57 +60,55 @@ export class ContactComponent implements OnInit,GridOptions, OnDestroy {
     this.tab_adresse = []
     this.index = 0;
     this.adresseSubscription = new Subscription();
-    this.auxObservable = new Observable<Adresse>();
+    this.contact = new Contact()
+    this.contactSubscription = new Subscription();
   }
 
+
+
+
+
+
   ngOnInit(): void {
-    this.getAdresses();
-    this.auxObservable.subscribe(
-      adresse =>{
-        this.adresses.push(adresse);
+    this.rowData= [];
+    console.log(this.tab_adresse)
+    if(this.tab_adresse.length > 0) {
+      for(let adresse of this.tab_adresse){
+        this.rowData.push(
+          {
+            type: ""+adresse.typeAdresse,
+            adresse: ""+adresse.numero+" "+adresse.typeVoie+" "+adresse.rue,
+            ville: ""+adresse.ville,
+            cp: adresse.cp,
+            pays: adresse.pays,
+            numero: adresse.numeroTelephone,
+            commentaire: adresse.commentaire
+
       }
-    )
-    for (let adresse of this.adresses){
-      this.rowData.push(
-        {
-          type: adresse.typeAdresse,
-          adresse: ""+adresse.numero+" "+adresse.typeVoie+" "+adresse.rue,
-          ville: adresse.ville,
-          cp: adresse.cp,
-          pays: adresse.pays,
-          numero: adresse.numeroTelephone,
-          commentaire: adresse.commentaire
-        })
+        )
+      }
     }
   }
 
-  addAdresse(typeAdresse: string, numero: number, typeVoie: string, rue: string, ville: string, cp: number, pays: string, telephone: string, commentaire: string) {
-    this.rowData.push({
-      type: typeAdresse,
-      adresse: "" + numero + " " + typeVoie + " " + rue,
-      ville: ville,
-      cp: cp,
-      pays: pays,
-      numero: telephone,
-      commentaire: commentaire
-    });
-  }
+
 
   deleteContact() {
     this.listContactService.deleteContact(this.index);
   }
 
-  getAdresses() {
-    this.adresseSubscription = this.adresseService.getAdresses().subscribe(
-      adresses => {
-        this.adresses = adresses;
-      }
-    )
-  }
+  /**
+   *
+   *
+   *
+   * j'ai fai ici puisque le script de modification n'a pas marché pour moi,
+   *  une supression du contact, et la re creation d'un selon nos désirs.
+   * @constructor
+   */
 
-
-  getAdresse(id: string){
-     this.auxObservable = this.adresseService.getAdresse(id);
+  ModifyContact(){
+    this.listContactService.deleteContact(this.index);
+    this.router.navigate(['/modify/'+this.id]);
+    this.contactSubscription.unsubscribe();
   }
 
 

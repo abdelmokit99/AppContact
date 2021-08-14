@@ -1,14 +1,16 @@
 
 <div class="col-md-1 col-lg-1"></div>
 <div class="col-xs-12 col-sm-12 col-md-11 col-lg-11">
-  <mat-expansion-panel style="margin: 15px;padding: 5px">
+  <mat-expansion-panel style="margin: 15px;padding: 5px;background-color: #BFB99B">
     <mat-expansion-panel-header >
-
-      <mat-panel-title style="font-size: larger">
+      <div class="col-md-6 col-lg-6"><mat-panel-title style="font-size: larger">
         {{nom}} {{prenom}}
-      </mat-panel-title>
-      <mat-panel-description>{{dateNaissance}} , {{id}}
-      </mat-panel-description>
+      </mat-panel-title></div>
+      <div class="col-md-6 col-md-6">
+        <mat-panel-description>{{dateNaissance}}
+        </mat-panel-description>
+      </div>
+
     </mat-expansion-panel-header>
     <div class="row">
       <div class ="col col-lg-1"></div>
@@ -28,7 +30,7 @@
     </div>
 
     <mat-action-row>
-    <button mat-button>Modifier</button>
+    <button mat-button (click)="ModifyContact()">Modifier</button>
     <button mat-button (click)="deleteContact()">Supprimer</button>
     </mat-action-row>
   </mat-expansion-panel>

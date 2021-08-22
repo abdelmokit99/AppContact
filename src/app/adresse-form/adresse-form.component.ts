@@ -21,7 +21,7 @@ export class AdresseFormComponent implements OnInit{
   gridOptions : GridOptions;
 
   public modules: Module[] = AllCommunityModules;
-
+/*
   columnDefs = [
     {field: 'type', sortable: true, filter: true},
     {field: 'adresse', sortable: true, filter: true},
@@ -30,11 +30,38 @@ export class AdresseFormComponent implements OnInit{
     {field: 'pays', sortable: true, filter: true},
     {field: 'numero', sortable: true, filter: true},
     {field: 'commentaire'}];
+  defaultColDef = {
+    editable: true,
+  };*/
+  columnDefs = [
+    {headerName: "type d'adresse", field:"type"},
+    {headerName: "numero de voie", field: 'numeroVoie',sortable: true,filter: true },
+    {headerName: "type de voie", field: 'typeVoie',sortable: true,filter: true },
+    {headerName: "nom de voie", field: 'nomVoie',sortable: true,filter: true },
+    {field: 'ville', sortable: true, filter: true},
+    {field: 'cp', sortable: true, filter: true},
+    {field: 'pays', sortable: true, filter: true},
+    {field: 'numero', sortable: true, filter: true},
+    {field: 'commentaire'}
+  ];
+  selectedRow ={};
+
+
+  defaultColDef = {
+    editable: true,
+  };
 
 
   rowData = [
-    { type: "", adresse: "", ville:"", cp: 0, pays: "",numero: "", commentaire: "" }
-    ];
+    { type: "",
+      numeroVoie: "",
+      typeVoie: "",
+      nomVoie: "",
+      ville:"",
+      cp: 0,
+      pays: "",
+      numero: "",
+      commentaire: "" }    ];
 
   Form: FormGroup;
   adress : Adresse[];
@@ -45,9 +72,9 @@ export class AdresseFormComponent implements OnInit{
               private adresseService : AdresseService,
               private router: Router) {
     this.Form = this.fb.group({
-      nom : ['',Validators.required],
-      prenom : ['',Validators.required],
-      dateNaissance : ['',Validators.required],
+      nom : '',
+      prenom : '',
+      dateNaissance : '',
       typeAdresse : '',
       telephone : '',
       typeVoie : '',
@@ -63,12 +90,16 @@ export class AdresseFormComponent implements OnInit{
     this.gridOptions = {
       rowData: this.rowData,
       columnDefs: this.columnDefs,
+      defaultColDef : this.defaultColDef,
+      rowSelection: 'single',
+      //getSelectedRows: 'getSelectedRows',
     }
   }
   ngOnInit() {
     this.rowData.pop();
-  }
 
+  }
+/**
   addAdresse(){
     const formValue = this.Form.value;
     if(formValue['typeAdresse']!= ""
@@ -94,28 +125,48 @@ export class AdresseFormComponent implements OnInit{
     }
 
     this.refreshTable();
-  }
+  }*/
+addAdresse(){
+   let aux= this.rowData
+   this.rowData=[]
+   for(let row of aux){
+     this.rowData.push(row)
+   }
+   this.rowData.push(
+     {
+     type: "Entrez une valeur",
+     numeroVoie: "Entrez une valeur",
+     typeVoie: "Entrez une valeur",
+     nomVoie: "Entrez une valeur",
+     ville:"Entrez une valeur",
+     cp: 0,
+     pays: "Entrez une valeur",
+     numero: "Entrez une valeur",
+     commentaire: "Entrez une valeur"}
+   )
+
+  //console.log(this.rowData)
+}
+
+
+
+deleteRow(){
+  this.rowData = this.rowData.filter(
+    element => element !== this.selectedRow
+  );
+
+}
+
+  onRowClicked(event: any) {
+  this.selectedRow = event.data
+  console.log('row', this.selectedRow);
+}
 
 
 
 
 
-  refreshTable(){
-    this.rowData = [];
-    for (let adresse of this.adress) {
-      this.rowData.push(
-        {
-          type: adresse.typeAdresse,
-          adresse: ""+adresse.numero+" "+adresse.typeVoie+" "+adresse.rue,
-          ville: adresse.ville,
-          cp: adresse.cp,
-          pays: adresse.pays,
-          numero: adresse.numeroTelephone,
-          commentaire: adresse.commentaire
-        }
-      )
-    }
-  }
+
   initForm() {
     this.Form = this.fb.group(
       {
@@ -141,9 +192,12 @@ export class AdresseFormComponent implements OnInit{
   onSubmit(): void {
     const formValue = this.Form.value;
     const datepipe: DatePipe = new DatePipe('en-US')
-    let formattedDate = datepipe.transform(formValue['dateNaissance'], 'dd-MM-YYYY')
+    let formattedDate = datepipe.transform(formValue['dateNaissance'], 'dd-MM-yyyy')
 
     this.contact = new Contact(""+formValue['nom'],""+formValue['prenom'],""+formattedDate);
+    for (let adresse of this.rowData) {
+      this.adress.push(new Adresse( adresse.type, adresse.typeVoie, adresse.nomVoie, +adresse.numeroVoie , adresse.ville, adresse.cp, adresse.pays,adresse.numero, adresse.commentaire))
+    }
     for(let adresse of this.adress){
       this.adresseService.addAdresse(adresse);
       this.contact.addAdresse(adresse);
@@ -163,5 +217,6 @@ export class AdresseFormComponent implements OnInit{
 
   deleteAdresses(){
     this.rowData = [];
+    this.adress = [];
   }
 }

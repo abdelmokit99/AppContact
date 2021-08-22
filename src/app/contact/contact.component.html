@@ -1,17 +1,50 @@
 
 <div class="col-md-1 col-lg-1"></div>
-<div class="col-xs-12 col-sm-12 col-md-11 col-lg-11">
-  <mat-expansion-panel style="margin: 15px;padding: 5px;background-color: #BFB99B">
-    <mat-expansion-panel-header >
-      <div class="col-md-6 col-lg-6"><mat-panel-title style="font-size: larger">
-        {{nom}} {{prenom}}
-      </mat-panel-title></div>
-      <div class="col-md-6 col-md-6">
-        <mat-panel-description>{{dateNaissance}}
-        </mat-panel-description>
-      </div>
+<div class="col-xs-12 col-sm-12 col-md-11 col-lg-11" >
+  <mat-expansion-panel style="margin: 15px;padding: 5px;background-color: #F2C777" >
+    <mat-expansion-panel-header>
+      <div class="col-md-6 col-lg-6" [style.display]="!isVisible ? 'block' : 'none'">
+        <mat-panel-title style="font-size: larger" >
+        {{this.contact.nom}} {{this.contact.prenom}}
 
+
+        </mat-panel-title></div>
+      <div class="col-md-1 col-lg-1"></div>
+      <div class="col-xs-12 col-sm-12 col-md-11 col-lg-11" style="height : 100%">
+        <h1 [style.display]="isVisible ? 'block' : 'none'" style="padding-top: 15px">Veillez modifiez les informations de votre contact : {{nom}} {{prenom}}</h1>
+      </div>
+      <div class="col-md-6 col-md-6" [style.display]="!isVisible ? 'block' : 'none'">
+        <mat-panel-description [style.display]="!isVisible ? 'block' : 'none'">{{this.contact.date_naissance}}
+        </mat-panel-description>
+
+      </div>
     </mat-expansion-panel-header>
+
+      <form [formGroup]="Form" [style.display]="isVisible ? 'block' : 'none'">
+        <div class="form-row">
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                <mat-form-field class="fields" appearance="fill" style="width: 100%;padding-right: 5px; padding-left: 5px">
+                  <mat-label>{{this.contact.nom}}</mat-label>
+                  <input matInput placeholder="{{this.contact.prenom}}" type="text" id="nom" formControlName="nom">
+                </mat-form-field>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <mat-form-field class="fields" appearance="fill" style="width: 100%;padding-right: 5px; padding-left: 5px">
+                <mat-label>{{this.contact.prenom}}</mat-label>
+                <input matInput placeholder="{{this.contact.prenom}}" type="text" id="prenom" formControlName="prenom">
+              </mat-form-field>
+            </div>
+          <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <mat-form-field appearance="fill">
+              <mat-label>date de naissance</mat-label>
+              <input matInput [matDatepicker]="picker" placeholder="{{this.contact.date_naissance}}" id="dateNaissance" formControlName="dateNaissance">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+
     <div class="row">
       <div class ="col col-lg-1"></div>
       <div class="col-lg-11 col-md-11 col-sm-12 col-xs-12">
@@ -25,13 +58,35 @@
         [rowData]="rowData"
         [columnDefs]="columnDefs"
         [modules]="modules"
+        [defaultColDef]="defaultColDef"
+        (rowClicked)='onRowClicked($event)'
+        [enableRangeSelection]="true"
+        rowSelection='single'
       >
       </ag-grid-angular>
     </div>
 
     <mat-action-row>
-    <button mat-button (click)="ModifyContact()">Modifier</button>
-    <button mat-button (click)="deleteContact()">Supprimer</button>
+      <div class="container">
+        <div class="row">
+
+          <div class="col-xs-12 col-sm-12 col-xs-12 col-sm-12 col-md-2 col-lg-2">
+            <button mat-button (click)="ModifyContact()"[style.display]="!isVisible ? 'block' : 'none'">Modifier</button>
+          </div>
+          <div  class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+            <button mat-button (click)="addAdresse()"[style.display]="isVisible ? 'block' : 'none'">Ajouter Adresse</button>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+            <button mat-button (click)="deleteRow()"[style.display]="isVisible ? 'block' : 'none'">Supprimer Adresse</button>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+            <button mat-button (click)="SubmitModif()"[style.display]="isVisible ? 'block' : 'none'">Enregistrer</button>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+            <button mat-button (click)="deleteContact()" >Supprimer</button>
+          </div>
+        </div>
+      </div>
     </mat-action-row>
   </mat-expansion-panel>
 </div>

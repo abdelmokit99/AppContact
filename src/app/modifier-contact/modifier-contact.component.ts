@@ -177,9 +177,9 @@ export class ModifierContactComponent implements OnInit {
   onSubmit(): void {
     const formValue = this.Form.value;
     const datepipe: DatePipe = new DatePipe('en-US')
-    let formattedDate = datepipe.transform(formValue['dateNaissance'], 'DD-MMM-YYYY')
+    let formattedDate = datepipe.transform(formValue['dateNaissance'], 'dd-MMM-YYYY')
 
-    this.contact = new Contact(""+formValue['nom'],""+formValue['prenom'],""+formValue['dateNaissance']);
+    this.contact = new Contact(""+formValue['nom'],""+formValue['prenom'],""+formattedDate);
     for(let adresse of this.adress){
       this.adresseService.addAdresse(adresse);
       this.contact.addAdresse(adresse);

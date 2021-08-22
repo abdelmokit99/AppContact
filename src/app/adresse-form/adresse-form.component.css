@@ -25,11 +25,7 @@
 .col:last-child {
   margin-right: 0;
 }
-.adresse-form {
-  min-width: 300px;
-  max-width: 1000px;
-  width: 100%;
-}
+
 
 .fields {
   width: 100%;
